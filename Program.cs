@@ -1,10 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using JoseBrito_AP1_P1.Components;
+using JoseBrito_AP1_P1.DAL;
+using JoseBrito_AP1_P1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+.AddInteractiveServerComponents();
+
+builder.Services.AddContext<Contexto>(Options => Options.UseSqlite(ConStr));
+
+builder.Services.AddScoped<ParcialServices>();
 
 var app = builder.Build();
 

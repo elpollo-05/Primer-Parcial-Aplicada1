@@ -1,0 +1,77 @@
+﻿@page "/Registro/Index"
+@rendermode InteractiveServer
+@inject NavigationManager navigation
+
+<PageTitle>Registro</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+
+		<div class="card-header">
+			<h5 class="card-title">Registro</h5>
+		</div>
+		<div class="card-body">
+			<table class="table table-light table-hover">
+				<thead class="table table-striped ">
+					<tr>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="text-center text-black">
+
+						<td class="text-center">
+							<a href="#" class="btn bi bi-eye"></a>
+						</td>
+						<td class="text-center">
+							<a href="#" class="btn bi bi-pencil-square"></a>
+						</td>
+						<td class="text-center">
+							<a href="#" class="btn bi bi-trash"></a>
+						</td>
+					</tr>
+				</tbody>
+
+			</table>
+		</div>
+		<div class="card-footer">
+
+			<a href="#"
+			   class="btn btn-primary">
+				<span class="bi bi-floppy mt-3"></span> Guardar
+			</a>
+			<a href="#"
+			   class="btn btn-primary">
+				<span class="bi bi-arrow-left mt-3"></span> Volver
+			</a>
+		</div>
+
+	</div>
+</div>
+@code {
+	public List<Registro> registro = new List<Registro>();
+	private string filtro = "";
+	private string valorFiltro = "";
+
+	protected override async Task OnInitializedAsync()
+	{
+		prioridades = await registroService.Listar(p => true);
+	}
+
+	private async Task Buscar()
+	{
+		if (!string.IsNullOrWhiteSpace(valorFiltro))
+		{
+			if (filtro == "id" && int.TryParse(valorFiltro, out int registroId))
+			{
+				prioridades = await registroService.Listar(r => r.RegistroId == registroId);
+			}
+			else if (filtro == "Descripcion")
+			{
+				prioridades = await registroService.Listar(p => p.Descripcion.ToLower().Contains(valorFiltro.ToLower()));
+			}
+		}
+		else
+		{
+			registro = await registroService.Listar(p => true);
+		}
+	}
+}
